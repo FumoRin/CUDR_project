@@ -39,7 +39,7 @@ def edit_penumpang():
     gerbong = input("Masukkan bagian gerbong yang baru : ")
     tempat_duduk = input("Masukkan nomor tempat duduk yang baru : ")
     perjalanan = input("Masukkan perjalanan baru yang diinginkan : ")
-    c.execute("UPDATE perjalanan SET (penumpang=?, kereta=?, gerbong=?, duduk=?, perjalanan=?)", (nama, kereta, gerbong, tempat_duduk, perjalanan))
+    c.execute("UPDATE perjalanan SET (penumpang=?, kereta=?, gerbong=?, duduk=?, perjalanan=?,)", (nama, kereta, gerbong, tempat_duduk, perjalanan))
     conn.commit()
     print("Perubahan sudah dibuat di database!")
 
@@ -120,7 +120,7 @@ def main_program():
             else :
                 print("Pilihan yang anda masukkan tidak valid, Mohon untuk coba kembali.")
 
-        repeat = input("Apakah anda ingin menggunakan kembali program ini? (yes/no) : ".lower())
+        repeat = input("Apakah anda ingin menggunakan kembali program ini? (yes/no) (default : no) : ".lower())
         if repeat != "yes":
             loadingOut()
             clear()
