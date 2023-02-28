@@ -2,6 +2,9 @@ import sqlite3 as sql
 import os
 import time
 import sys
+from prettytable import PrettyTable
+# Modul diatas harus terinstall. 
+# Jika terjadi error karena modul tidak ada, install melalui cmd dengan command "pip install []" atau "python.exe pip install []"
 
 conn = sql.connect('perjalanan.db')
 c = conn.cursor()
@@ -44,7 +47,7 @@ def edit_penumpang():
     print("Perubahan sudah dibuat di database!")
 
 def read_all():
-    c.execute("SELECT * FROM perjalanan ORDER BY id DESC")
+    c.execute("SELECT * FROM perjalanan")
     return c.fetchall()
 
 def read_specific(id):
@@ -59,8 +62,13 @@ def read_info():
     if not penumpang:
         print("ID yang dimasukkan tidak ada di database, Coba cek kembali ID penumpang yang dimasukkan.")
     else :
+        table = PrettyTable()
+        table.field_names = ["ID", "Nama Penumpang", "Kereta", "Gerbong", "Tempat Duduk", "Perjalanan"]
         for orang in penumpang:
-            print(f"ID = {orang[0]}, Nama Penumpang = {orang[1]}, Kereta = {orang[2]}, Gerbong = {orang[3]}, Tempat Duduk = {orang[4]}, Perjalanan = {orang[5]}")
+            table.add_row([orang[0], orang[1], orang[2], orang[3], orang[4], orang[5]])
+        print(table)
+            
+
 
 def loadingIn():
     print("Loading :")
