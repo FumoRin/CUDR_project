@@ -18,7 +18,7 @@ def tambah_penumpang():
     nama = input("Masukkan nama penumpang : ")
     kereta = input("Masukkan nama kereta : ")
     gerbong = input ("Masukkan bagian gerbong yang diinginkan : ")
-    tempat_duduk = input("Masukkan nomor tempat duduk penumpang :")
+    tempat_duduk = input("Masukkan nomor tempat duduk penumpang : ")
     perjalanan = input("Masukkan perjalanan yang akan dilewati : ")
     c.execute("INSERT INTO perjalanan (penumpang, kereta, gerbong, duduk, perjalanan) VALUES (?, ?, ?, ?, ?)", (nama, kereta, gerbong, tempat_duduk, perjalanan))
     conn.commit()
@@ -33,18 +33,18 @@ def hapus_penumpang():
 
 def edit_penumpang():
     clear()
-    id = input("Masukkan nomor ID penumpang yang akan diubah : ")
+    id = int(input("Masukkan nomor ID penumpang yang akan diubah : "))
     nama = input("Masukkan nama penumpang yang baru : ")
     kereta = input("Masukkan nama kereta yang baru : ")
     gerbong = input("Masukkan bagian gerbong yang baru : ")
-    tempat_duduk = input("Masukkan nomor tempat duduk yang baru : ")
+    tempat_duduk = int(input("Masukkan nomor tempat duduk yang baru : "))
     perjalanan = input("Masukkan perjalanan baru yang diinginkan : ")
-    c.execute("UPDATE perjalanan SET (penumpang=?, kereta=?, gerbong=?, duduk=?, perjalanan=?,)", (nama, kereta, gerbong, tempat_duduk, perjalanan))
+    c.execute("UPDATE perjalanan SET penumpang=?, kereta=?, gerbong=?, duduk=?, perjalanan=? WHERE id=?", (nama, kereta, gerbong, tempat_duduk, perjalanan, id))
     conn.commit()
     print("Perubahan sudah dibuat di database!")
 
 def read_all():
-    c.execute("SELECT * FROM perjalanan")
+    c.execute("SELECT * FROM perjalanan ORDER BY id DESC")
     return c.fetchall()
 
 def read_specific(id):
@@ -54,14 +54,13 @@ def read_specific(id):
 def read_info():
     clear()
     id = input("Masukkan ID penumpang yang ingin ditampilkan (Kosongkan jika ingin melihat semua data penumpang) : ")
+    clear()
     penumpang = read_all() if not id else read_specific(id)
     if not penumpang:
-        clear()
         print("ID yang dimasukkan tidak ada di database, Coba cek kembali ID penumpang yang dimasukkan.")
     else :
-        for penumpang in penumpang:
-            clear()
-            print(f"ID = {penumpang[0]}, Nama Penumpang = {penumpang[1]}, Kereta = {penumpang[2]}, Gerbong = {penumpang[3]}, Tempat Duduk = {penumpang[4]}, Perjalanan = {penumpang[5]}")
+        for orang in penumpang:
+            print(f"ID = {orang[0]}, Nama Penumpang = {orang[1]}, Kereta = {orang[2]}, Gerbong = {orang[3]}, Tempat Duduk = {orang[4]}, Perjalanan = {orang[5]}")
 
 def loadingIn():
     print("Loading :")
