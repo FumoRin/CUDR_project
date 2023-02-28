@@ -8,6 +8,7 @@ from prettytable import PrettyTable
 
 conn = sql.connect('perjalanan.db')
 c = conn.cursor()
+
 c.execute('''CREATE TABLE IF NOT EXISTS perjalanan
             (id INTEGER PRIMARY KEY,
             penumpang TEXT,
@@ -25,7 +26,7 @@ def tambah_penumpang():
     perjalanan = input("Masukkan perjalanan yang akan dilewati : ")
     c.execute("INSERT INTO perjalanan (penumpang, kereta, gerbong, duduk, perjalanan) VALUES (?, ?, ?, ?, ?)", (nama, kereta, gerbong, tempat_duduk, perjalanan))
     conn.commit()
-    print("Penumpang sudah ditambahkan sudah ditambahkan! \n")
+    print("Penumpang sudah ditambahkan! \n")
 
 def hapus_penumpang():
     clear()
@@ -36,15 +37,67 @@ def hapus_penumpang():
 
 def edit_penumpang():
     clear()
+    penumpang = read_all()
+    table = PrettyTable()
+    table.field_names = ["ID", "Nama Penumpang", "Kereta", "Gerbong", "Tempat Duduk", "Perjalanan"]
+    for orang in penumpang:
+        table.add_row([orang[0], orang[1], orang[2], orang[3], orang[4], orang[5]])
+    print(table)
     id = int(input("Masukkan nomor ID penumpang yang akan diubah : "))
-    nama = input("Masukkan nama penumpang yang baru : ")
-    kereta = input("Masukkan nama kereta yang baru : ")
-    gerbong = input("Masukkan bagian gerbong yang baru : ")
-    tempat_duduk = int(input("Masukkan nomor tempat duduk yang baru : "))
-    perjalanan = input("Masukkan perjalanan baru yang diinginkan : ")
-    c.execute("UPDATE perjalanan SET penumpang=?, kereta=?, gerbong=?, duduk=?, perjalanan=? WHERE id=?", (nama, kereta, gerbong, tempat_duduk, perjalanan, id))
-    conn.commit()
-    print("Perubahan sudah dibuat di database!")
+    c.execute("SELECT * FROM perjalanan WHERE id=?", (id,))
+    penumpang = c.fetchone()
+    if penumpang is None:
+        print(f"Penumpang dengan ID {id} tidak ditemukan di database")
+    else:
+        clear()
+        print(f"Data penumpang dengan ID {id} : ")
+        print(f"1. Nama Penumpang : {penumpang[1]}")
+        print(f"2. Kereta : {penumpang[2]}")
+        print(f"3. Gerbong : {penumpang[3]}")
+        print(f"4. Tempat duduk : {penumpang[4]}")
+        print(f"5. Perjalanan : {penumpang[5]}")
+
+        choice = input("Masukkan data yang anda ingin ubah (1-5) : ")
+
+        while True:
+            if choice:
+                if choice == "1":
+                    nama = input("Masukkan nama penumpang yang baru : ")
+                    c.execute("UPDATE perjalanan SET penumpang=? WHERE id=?", (nama, id))
+                    conn.commit()
+                    clear()
+                    print("Data penumpang telah dibuat!")
+                    break
+                elif choice == "2":
+                    kereta = input("Masukkan nama kereta yang baru : ")
+                    c.execute("UPDATE perjalanan SET kereta=? WHERE id=?", (kereta, id))
+                    conn.commit()
+                    clear()
+                    print("Data penumpang telah diubah!")
+                    break
+                elif choice == "3":
+                    gerbong = input("Masukkan bagian gerbong yang baru : ")
+                    c.execute("UPDATE perjalanan SET gerbong=? WHERE id=?", (gerbong , id))
+                    conn.commit()
+                    clear()
+                    print("Data penumpang telah diubah!")
+                    break
+                elif choice == "4":
+                    tempat_duduk = int(input("Masukkan nomor tempat duduk yang baru : "))
+                    c.execute("UPDATE perjalanan SET duduk=? WHERE id=?", (tempat_duduk, id))
+                    conn.commit()
+                    clear()
+                    print("Data penumpang telah diubah!")
+                    break
+                elif choice == "5":
+                    perjalanan = input("Masukkan perjalanan baru yang diinginkan : ")
+                    c.execute("UPDATE perjalanan SET perjalanan=? WHERE id=?", (perjalanan, id))
+                    conn.commit()
+                    clear()
+                    print("Data Penumpang telah diubah!")
+                    break
+                else:
+                    Print("Pilihan anda tidak valid, Coba kembali.")
 
 def read_all():
     c.execute("SELECT * FROM perjalanan")
@@ -67,8 +120,6 @@ def read_info():
         for orang in penumpang:
             table.add_row([orang[0], orang[1], orang[2], orang[3], orang[4], orang[5]])
         print(table)
-            
-
 
 def loadingIn():
     print("Loading :")
@@ -90,7 +141,7 @@ def loadingOut():
         sys.stdout.flush()
 
 def clear():
-    os.system("cls")
+    os.system("cls" if os.name == 'nt' else 'clear')
 
 def main_program():
     clear()  
@@ -132,12 +183,6 @@ def main_program():
             loadingOut()
             clear()
             break
-
-    
-        
-    
-
-
 
 
 if __name__ == '__main__':
