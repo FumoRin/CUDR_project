@@ -97,7 +97,7 @@ def edit_penumpang():
                     print("Data Penumpang telah diubah!")
                     break
                 else:
-                    Print("Pilihan anda tidak valid, Coba kembali.")
+                    print("Pilihan anda tidak valid, Coba kembali.")
 
 def read_all():
     c.execute("SELECT * FROM perjalanan")
